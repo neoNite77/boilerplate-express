@@ -1,6 +1,7 @@
 require('dotenv').config()
 const e = require('express');
 let express = require('express');
+let bodyParser = require('body-parser');
 let app = express();
 
 console.log("Hello World");
@@ -11,6 +12,11 @@ app.use(function (req, res, next) {
   console.log(string);
   next();
 })
+
+// bodyParser statements need to go above any routes that might have been defined
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(bodyParser.json());
 
 
 // app.get("/", (req, res) => {
@@ -58,11 +64,17 @@ app.get('/:word/echo', function (req, res, next) {
 }); 
 
 // Example: http://localhost:3000/name?first=jane&last=doe
-app.get('/name', function (req, res, next) {
-  res.json({
-    "name" : req.query.first + " " + req.query.last
-  })
-})
+// app.get('/name', function (req, res, next) {
+//   res.json({
+//     "name" : req.query.first + " " + req.query.last
+//   })
+// })
+
+// Post Data from POST requests
+app.post('/name', function (req, res, next) {
+  var string = req.body.first + " " + req.body.last;
+  res.json({name : string});
+});
 
 
 
